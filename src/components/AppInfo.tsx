@@ -10,9 +10,10 @@ import sharedStyles from '../sharedStyles';
 
 interface AppInfoProps {
   info?: AppItem;
+  userCount?: number;
 }
 
-const AppInfo: React.FC<AppInfoProps> = ({ info }) => {
+const AppInfo: React.FC<AppInfoProps> = ({ info, userCount }) => {
   return (
     <div
       css={[
@@ -28,6 +29,7 @@ const AppInfo: React.FC<AppInfoProps> = ({ info }) => {
     >
       <Typography>App name: {info?.appName}</Typography>
       <Typography>Category: {info?.category}</Typography>
+      <Typography>Users: {userCount}</Typography>
       <Typography>Connector: {info?.appSources[0]}</Typography>
     </div>
   );

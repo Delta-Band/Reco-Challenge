@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState } from 'react';
-import './App.css';
 import { AppNavBar, AppList } from './components';
 
 const App: React.FC = () => {
@@ -9,7 +8,10 @@ const App: React.FC = () => {
   return (
     <div
       css={{
+        display: 'flex',
+        flexDirection: 'column',
         overflowX: 'hidden',
+        backgroundColor: '#FAFAFA',
         '& *': {
           boxSizing: 'border-box'
         }

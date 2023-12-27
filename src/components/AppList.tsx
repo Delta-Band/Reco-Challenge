@@ -12,38 +12,52 @@ import { AppItem } from '../models';
 
 const AppList: React.FC = () => {
   const [appList, setAppList] = useState<AppItem[]>([]);
+  const [totalCount, setTotalCount] = useState<number>(0);
   const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 25,
+    page: 0
+  });
 
-  const getAppList: () => Promise<void> = async () => {
-    try {
-      const response = await fetch('/api/v1/app-service/get-apps', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': '69420'
-        },
-        body: JSON.stringify({
-          pageNumber: 0,
-          pageSize: 25
-        })
-      });
+  console.log('appList: ', appList);
+
+  const getAppList = async (): Promise<void> => {
+    setIsLoading(true);
+    const response = await fetch('/api/v1/app-service/get-apps', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': '69420'
+      },
+      body: JSON.stringify({
+        pageNumber: paginationModel.page,
+        pageSize: paginationModel.pageSize
+      })
+    });
+    if (response.ok) {
       const data = await response.json();
-      if (data.appRows) {
-        setAppList(
-          data.appRows.map((item: { appId: any }) => ({
-            ...item,
-            id: item.appId
-          }))
-        );
-      }
-    } catch (error) {
-      console.error(error);
+      setAppList(
+        data.appRows.map((item: { appId: any }) => ({
+          ...item,
+          id: item.appId
+        }))
+      );
+      setTotalCount(data.totalCount);
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+      console.error(`${response.statusText} [code: ${response.status}]`);
     }
   };
 
   useEffect(() => {
     getAppList();
-  }, []);
+  }, [paginationModel.page, paginationModel.pageSize]);
+
+  useEffect(() => {
+    // document.body.style.overflow = selectedAppId ? 'hidden' : 'auto';
+  }, [selectedAppId]);
 
   const columns = [
     {
@@ -64,14 +78,31 @@ const AppList: React.FC = () => {
     setSelectedAppId(row.row.id);
   };
 
+  console.log('totalCount:', totalCount);
+
   return (
-    <div
-      css={{ overflowX: 'hidden', paddingInline: 48, paddingBlockStart: 36 }}
-    >
+    <div css={{ overflowX: 'hidden', paddingInline: 48, paddingBlock: 36 }}>
       <Typography variant='h4' css={theme => ({ marginBlockEnd: 24 })}>
         App Inventory
       </Typography>
-      <DataGrid rows={appList} columns={columns} onRowClick={onRowClick} />
+      <DataGrid
+        loading={isLoading}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        paginationMode='server'
+        rows={appList}
+        rowCount={totalCount}
+        columns={columns}
+        onRowClick={onRowClick}
+        rowHeight={76}
+        disableRowSelectionOnClick
+        pageSizeOptions={[25, 50]}
+        css={{
+          height: 'calc(100vh - 211px)',
+          backgroundColor: '#FFFFFF',
+          borderRadius: 8
+        }}
+      />
       <motion.div
         style={{ pointerEvents: selectedAppId ? 'all' : 'none' }}
         onClick={e => {

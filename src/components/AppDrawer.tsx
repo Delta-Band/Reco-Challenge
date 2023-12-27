@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Typography, Button } from '@mui/material';
 import { motion } from 'framer-motion';
 import { CloseOutline as CloseIcon } from '@styled-icons/evaicons-outline/CloseOutline';
@@ -8,6 +8,7 @@ import { AppItem } from '../models';
 import AppCard from './AppCard';
 import sharedStyles from '../sharedStyles';
 import AppInfo from './AppInfo';
+import UserList from './UserList';
 
 interface DrawerProps {
   selectedAppId: string | null;
@@ -20,23 +21,23 @@ const Drawer: React.FC<DrawerProps> = ({
   onClose = () => {},
   appOverview
 }) => {
-  //   const [overviewData, setOverviewData] = useState<any>(null);
+  const [users, setUsers] = useState<string[]>([]);
   const getAppOverview: () => Promise<void> = async () => {
-    try {
-      const response = await fetch(
-        `/api/v1/app-service/get-app-overview/${selectedAppId}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'ngrok-skip-browser-warning': '69420'
-          }
+    const response = await fetch(
+      `/api/v1/app-service/get-app-overview-users/${selectedAppId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': '69420'
         }
-      );
+      }
+    );
+    if (response.ok) {
       const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error(error);
+      setUsers(data.appUsers);
+    } else {
+      console.error(`${response.statusText} [code: ${response.status}]`);
     }
   };
 
@@ -73,7 +74,8 @@ const Drawer: React.FC<DrawerProps> = ({
           <Typography variant='h5'>App Overview</Typography>
           <AppCard name={appOverview?.appName} />
         </section>
-        <AppInfo info={appOverview} />
+        <AppInfo info={appOverview} userCount={users.length} />
+        <UserList users={users} />
       </div>
       <Button
         onClick={onClose}
