@@ -8,6 +8,7 @@ import AppCard from './AppCard';
 import { AppItem } from '../models';
 
 const AppList: React.FC = () => {
+  const [error, setError] = useState<string>('');
   const [appList, setAppList] = useState<AppItem[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
@@ -19,6 +20,7 @@ const AppList: React.FC = () => {
 
   const getAppList = async (): Promise<void> => {
     setIsLoading(true);
+    setError('');
     const response = await fetch('/api/v1/app-service/get-apps', {
       method: 'PUT',
       headers: {
@@ -42,7 +44,8 @@ const AppList: React.FC = () => {
       setIsLoading(false);
     } else {
       setIsLoading(false);
-      console.error(`${response.statusText} [code: ${response.status}]`);
+      setError(`${response.statusText} [code: ${response.status}]`);
+      setAppList([]);
     }
   };
 
@@ -72,7 +75,7 @@ const AppList: React.FC = () => {
   return (
     <div css={{ overflowX: 'hidden', paddingInline: 48, paddingBlock: 36 }}>
       <Typography variant='h4' css={theme => ({ marginBlockEnd: 24 })}>
-        App Inventory
+        App Inventory {error}
       </Typography>
       <DataGrid
         loading={isLoading}

@@ -21,7 +21,9 @@ const Drawer: React.FC<DrawerProps> = ({
   appOverview
 }) => {
   const [users, setUsers] = useState<string[]>([]);
+  const [error, setError] = useState<string>('');
   const getAppOverview: () => Promise<void> = async () => {
+    setError('');
     const response = await fetch(
       `/api/v1/app-service/get-app-overview-users/${selectedAppId}`,
       {
@@ -36,7 +38,7 @@ const Drawer: React.FC<DrawerProps> = ({
       const data = await response.json();
       setUsers(data.appUsers);
     } else {
-      console.error(`${response.statusText} [code: ${response.status}]`);
+      setError(`${response.statusText} [code: ${response.status}]`);
     }
   };
 
@@ -74,7 +76,7 @@ const Drawer: React.FC<DrawerProps> = ({
           <AppCard name={appOverview?.appName} />
         </section>
         <AppInfo info={appOverview} userCount={users.length} />
-        <UserList users={users} />
+        {error ? error : <UserList users={users} />}
       </div>
       <Button
         onClick={onClose}
