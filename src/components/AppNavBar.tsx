@@ -1,22 +1,33 @@
 /** @jsxImportSource @emotion/react */
 import { Typography } from '@mui/material';
 import { css } from '@emotion/react';
-import { row } from '../sharedStyles';
+import sharedStyles from '../sharedStyles';
 import { Tab, Tabs } from '@mui/material';
-import { PropTypes } from 'prop-types';
 
-export default function AppNavBar({ selectedTab, setSelectedTab }) {
-  function a11yProps(index) {
+interface AppNavBarProps {
+  selectedTab: number;
+  setSelectedTab: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const AppNavBar: React.FC<AppNavBarProps> = ({
+  selectedTab,
+  setSelectedTab
+}) => {
+  function a11yProps(index: number) {
     return {
       id: `simple-tab-${index}`,
       'aria-controls': `simple-tabpanel-${index}`
     };
   }
 
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setSelectedTab(newValue);
+  };
+
   return (
     <div
       css={[
-        row.standard,
+        sharedStyles.row.standard,
         css({
           width: '100vw',
           backgroundColor: '#1F5CED',
@@ -27,11 +38,11 @@ export default function AppNavBar({ selectedTab, setSelectedTab }) {
         })
       ]}
     >
-      <div css={[row.standard]}>
+      <div css={[sharedStyles.row.standard]}>
         <Typography variant='h5'>Reco</Typography>
         <Tabs
           value={selectedTab}
-          onChange={setSelectedTab}
+          onChange={handleChange}
           aria-label='main navigation tabs'
           indicatorColor='secondary'
           textColor='secondary'
@@ -39,14 +50,11 @@ export default function AppNavBar({ selectedTab, setSelectedTab }) {
           <Tab label='Apps' {...a11yProps(0)} />
         </Tabs>
       </div>
-      <div css={[row.standard]}>
+      <div css={[sharedStyles.row.standard]}>
         <Typography variant='h5'>User Here</Typography>
       </div>
     </div>
   );
-}
-
-AppNavBar.propTypes = {
-  selectedTab: PropTypes.number.isRequired,
-  setSelectedTab: PropTypes.func.isRequired
 };
+
+export default AppNavBar;
