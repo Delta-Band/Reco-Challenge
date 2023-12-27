@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-// import App from './App';
-import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Root, AppList } from './routes';
 import '@fontsource/roboto/300.css';
@@ -11,7 +9,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { ThemeProvider } from '@emotion/react';
 import theme from './theme';
-import './App.css';
+import './global.css';
 
 const router = createBrowserRouter([
   {
