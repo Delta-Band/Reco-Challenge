@@ -2,9 +2,11 @@
   "name": "reco-challege",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://2a31-37-214-73-28.ngrok-free.app",
   "dependencies": {
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@fontsource/roboto": "^5.0.8",
     "@mui/material": "^5.15.2",
     "@mui/x-data-grid": "^6.18.6",
     "@testing-library/jest-dom": "^5.17.0",
