@@ -1,11 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { useEffect } from 'react';
-import { Typography, Button } from '@mui/material';
-import { motion } from 'framer-motion';
-import { CloseOutline as CloseIcon } from '@styled-icons/evaicons-outline/CloseOutline';
-import { AppItem } from '../models';
-import AppCard from './AppCard';
+import { Typography } from '@mui/material';
 import sharedStyles from '../sharedStyles';
 import UserListItem from './UserListItem';
 

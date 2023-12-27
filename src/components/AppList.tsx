@@ -1,11 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
 import React, { useEffect, useState } from 'react';
-import { Typography, Button } from '@mui/material';
+import { Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import sharedStyles from '../sharedStyles';
 import { motion } from 'framer-motion';
-import { CloseOutline as CloseIcon } from '@styled-icons/evaicons-outline/CloseOutline';
 import AppDrawer from './AppDrawer';
 import AppCard from './AppCard';
 import { AppItem } from '../models';
@@ -19,8 +16,6 @@ const AppList: React.FC = () => {
     pageSize: 25,
     page: 0
   });
-
-  console.log('appList: ', appList);
 
   const getAppList = async (): Promise<void> => {
     setIsLoading(true);
@@ -55,10 +50,6 @@ const AppList: React.FC = () => {
     getAppList();
   }, [paginationModel.page, paginationModel.pageSize]);
 
-  useEffect(() => {
-    // document.body.style.overflow = selectedAppId ? 'hidden' : 'auto';
-  }, [selectedAppId]);
-
   const columns = [
     {
       field: 'appName',
@@ -77,8 +68,6 @@ const AppList: React.FC = () => {
   }) => {
     setSelectedAppId(row.row.id);
   };
-
-  console.log('totalCount:', totalCount);
 
   return (
     <div css={{ overflowX: 'hidden', paddingInline: 48, paddingBlock: 36 }}>
@@ -130,9 +119,6 @@ const AppList: React.FC = () => {
             : undefined
         }
       />
-      {/* {appList.map((app, i) => (
-          <AppListItem key={i} app={app} />
-        ))} */}
     </div>
   );
 };
